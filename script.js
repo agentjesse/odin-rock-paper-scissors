@@ -6,7 +6,7 @@
 //generate a computer choice function 'getComputerChoice' and initialize a score counting variable.
 //make a function asking the player to input rock/paper/scissors (case iNseNsitiVE)as their choice, assigning the value to a mutable variable. name the two function's parameters playerSelection and computerSelection . Then, compare the player vs computer's choices. alert the result with choices that were compared. finally, restart game for 5 rounds.
 
-//return rock/pap/scis via 0-2 random switch statement
+//function to return rock/pap/scis via 0-2 random switch statement
 let getComputerChoice = () => {
   let num = Math.floor(Math.random() * 3);
   switch (num) {
@@ -23,23 +23,14 @@ let getComputerChoice = () => {
   return num;
 };
 
-//return string similar to: "You Lose! Paper beats Rock" 
+//function to return result in format: "You Lose! Paper beats Rock" 
 function playRound(playerSelection, computerSelection){
   // debugger
-  //check if player did not submit a valid answer, or a tie
-  if ( playerSelection.startsWith('rock') && playerSelection.endsWith('rock')
-      || playerSelection.startsWith('paper') && playerSelection.endsWith('paper')
-      || playerSelection.startsWith('scissors') && playerSelection.endsWith('scissors') ){
-    //check for ties
-    if (computerSelection === playerSelection){
+  //check if tie
+  if ( computerSelection === playerSelection){
       return 'It\'s a tie!';
-    }
   }
-  else {
-    return 'invalid choice, refresh page';
-  }
-
-  //check for winner
+  //check if winner
   //when pc = rock
   if ( computerSelection === 'rock' ){
     if (playerSelection === 'scissors'){ return 'You Lose! Rock beats Scissors' }
@@ -55,11 +46,24 @@ function playRound(playerSelection, computerSelection){
     if (playerSelection === 'rock'){ return 'You Win! Rock beats Scissors' }
     else if (playerSelection === 'paper') { return 'You Lose! Scissors beats Paper' };
   }
-  //bad choice
-  return 'invalid choice, refresh page';
+  //catch possible bad inputs like 'rock34234rock', '', 'rocks'
+  return 'invalid choice';
 };
 
-let computerSelection = getComputerChoice();
-// let computerSelection = 'rock';
-let playerSelection = prompt('Let\'s play rock, paper, scissors! Type your choice:', 'rock').trim().toLowerCase();
-console.log( playRound( playerSelection, computerSelection ) );
+//function to play the game for a certain amount of rounds
+function playGame(rounds) {
+  for (let i = 1; i < rounds+1 ; i++){
+    // debugger;
+    playerSelection = prompt(`Let's play rock, paper, scissors! Type your choice for round ${i}:`, 'rock').trim().toLowerCase();
+    computerSelection = getComputerChoice();
+    console.log( `Round: ${i}, Result: ${ playRound( playerSelection, computerSelection ) }` );
+  }
+}
+
+// global state variables to hold choices
+let computerSelection;
+let playerSelection;
+// console.log( playRound( playerSelection, computerSelection ) );
+
+// play 5 rounds of rock paper scissors
+playGame(5);
