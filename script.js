@@ -33,36 +33,56 @@ function playRound(playerSelection, computerSelection){
   //check if winner
   //when pc = rock
   if ( computerSelection === 'rock' ){
-    if (playerSelection === 'scissors'){ return 'You Lose! Rock beats Scissors' }
-    else if (playerSelection === 'paper') { return 'You Win! Paper beats Rock' };
+    if (playerSelection === 'scissors'){ 
+      return 'You Lose! Rock beats Scissors';
+    }
+    else if (playerSelection === 'paper') {
+      playerScore++;
+      return 'You Win! Paper beats Rock';
+    };
   }
   //when pc = paper
   if ( computerSelection === 'paper' ){
-    if (playerSelection === 'scissors'){ return 'You Win! Scissors beats Paper' }
-    else if (playerSelection === 'rock') { return 'You Lose! Paper beats Rock' };
+    if (playerSelection === 'scissors') {
+      playerScore++;
+      return 'You Win! Scissors beats Paper';
+    }
+    else if (playerSelection === 'rock') {
+      return 'You Lose! Paper beats Rock';
+    };
   }
   //when pc = scissors
   if ( computerSelection === 'scissors' ){
-    if (playerSelection === 'rock'){ return 'You Win! Rock beats Scissors' }
-    else if (playerSelection === 'paper') { return 'You Lose! Scissors beats Paper' };
+    if (playerSelection === 'rock') {
+      playerScore++;
+      return 'You Win! Rock beats Scissors';
+    }
+    else if (playerSelection === 'paper') {
+      return 'You Lose! Scissors beats Paper';
+    };
   }
   //catch possible bad inputs like 'rock34234rock', '', 'rocks'
-  return 'invalid choice';
+  return 'there was an invalid choice';
 };
 
 //function to play the game for a certain amount of rounds
 function playGame(rounds) {
   for (let i = 1; i < rounds+1 ; i++){
-    // debugger;
-    playerSelection = prompt(`Let's play rock, paper, scissors! Type your choice for round ${i}:`, 'rock').trim().toLowerCase();
+    // in case the user cancels the prompt, a random string is provided to stop error from .trim()
+    playerSelection = ( prompt(`Let's play rock, paper, scissors! Type your choice for round ${i}:`, 'rock') ?? 'promptWasCancelled').trim().toLowerCase();
     computerSelection = getComputerChoice();
     console.log( `Round: ${i}, Result: ${ playRound( playerSelection, computerSelection ) }` );
   }
+  console.log(`${ (playerScore/rounds > 0.5)
+                    ? `You won as the best of ${rounds} rounds!`
+                    : `You did not win as the best of ${rounds} rounds.`
+  }`);
 }
 
 // global state variables to hold choices
 let computerSelection;
 let playerSelection;
+let playerScore = 0;
 // console.log( playRound( playerSelection, computerSelection ) );
 
 // play 5 rounds of rock paper scissors
