@@ -1,12 +1,10 @@
-// console.log('test')
-// ---------TIC TAC TOE --------------
-//note: pseudocode below was first made in standalone lines and then bunched up since odin started changing how much it wanted me to follow or do myself.
+// tic tac toe game: function to generate computer's choice. function to ask
+// player to input rock/paper/scissors (case iNseNsitiVE)as a choice: name the
+// parameters playerSelection and computerSelection. Then, compare the choices
+// using a score counter. console log the result with choices that were
+// compared. finally, restart game for 5 rounds.
 
-// goal is to make a tic tac toe game with input from a prompt to the user of a choice(rock/paper/scissors).
-//generate a computer choice function 'getComputerChoice' and initialize a score counting variable.
-//make a function asking the player to input rock/paper/scissors (case iNseNsitiVE)as their choice, assigning the value to a mutable variable. name the two function's parameters playerSelection and computerSelection . Then, compare the player vs computer's choices. alert the result with choices that were compared. finally, restart game for 5 rounds.
-
-//function to return rock/pap/scis via 0-2 random switch statement
+//function to return rock/paper/scissors using a random number
 let getComputerChoice = () => {
   let num = Math.floor(Math.random() * 3);
   switch (num) {
@@ -23,7 +21,7 @@ let getComputerChoice = () => {
   return num;
 };
 
-//function to return result in format: "You Lose! Paper beats Rock" 
+//play one round and return result 
 function playRound(playerSelection, computerSelection){
   // debugger
   //check if tie
@@ -65,11 +63,12 @@ function playRound(playerSelection, computerSelection){
   return 'there was an invalid choice';
 };
 
-//function to play the game for a certain amount of rounds
+// play some rounds
 function playGame(rounds) {
   for (let i = 1; i < rounds+1 ; i++){
-    // in case the user cancels the prompt, a random string is provided to stop error from .trim()
-    playerSelection = ( prompt(`Let's play rock, paper, scissors! Type your choice for round ${i}:`, 'rock') ?? 'promptWasCancelled').trim().toLowerCase();
+    // if user cancels prompt, random string allows strogn methods on the returned null
+    playerSelection = ( prompt(`Let's play rock, paper, scissors! Type your
+    choice for round ${i}:`, 'rock') ?? 'promptCancelled').trim().toLowerCase();
     computerSelection = getComputerChoice();
     console.log( `Round: ${i}, Result: ${ playRound( playerSelection, computerSelection ) }` );
   }
@@ -79,11 +78,10 @@ function playGame(rounds) {
   }`);
 }
 
-// global state variables to hold choices
+// choice & state variables
 let computerSelection;
 let playerSelection;
 let playerScore = 0;
-// console.log( playRound( playerSelection, computerSelection ) );
 
-// play 5 rounds of rock paper scissors
+// start 5 game rounds
 playGame(5);
