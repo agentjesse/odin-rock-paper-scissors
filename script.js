@@ -84,4 +84,5 @@ let playerSelection;
 let playerScore = 0;
 
 // start 5 game rounds
-playGame(5);
+// playGame(5);
+playGame(2);
