@@ -1,88 +1,91 @@
-// tic tac toe game: function to generate computer's choice. function to ask
-// player to input rock/paper/scissors (case iNseNsitiVE)as a choice: name the
-// parameters playerSelection and computerSelection. Then, compare the choices
-// using a score counter. console log the result with choices that were
-// compared. finally, restart game for 5 rounds.
+// tic tac toe game with UI. gets a player choice from a button, then makes a pc choice and compares it. score updates with each round. based on result of after all rounds, the result element is updated with a message
 
-//function to return rock/paper/scissors using a random number
+//function to return rock/paper/scissors string as PC choice
 let getComputerChoice = () => {
   let num = Math.floor(Math.random() * 3);
   switch (num) {
     case 0:
-      num = 'rock';
-      break;
+      return 'rock';
     case 1:
-      num = 'paper';
-      break;
+      return 'paper';
     case 2:
-      num = 'scissors';
-      break;
+      return 'scissors';
   }
-  return num;
 };
 
-//play one round and return result 
+//play one round and change result element text content
 function playRound(playerSelection, computerSelection){
-  // debugger
   //check if tie
   if ( computerSelection === playerSelection){
-      return 'It\'s a tie!';
+      resultElem.textContent = `It's a tie between ${computerSelection}!`;
+      return;
   }
   //check if winner
   //when pc = rock
   if ( computerSelection === 'rock' ){
     if (playerSelection === 'scissors'){ 
-      return 'You Lose! Rock beats Scissors';
+      resultElem.textContent = `You Lose! computer's Rock beats Scissors`;
+      return;
     }
     else if (playerSelection === 'paper') {
       playerScore++;
-      return 'You Win! Paper beats Rock';
+      resultElem.textContent = `You Win! Paper beats computer's Rock`;
+      return;
     };
   }
   //when pc = paper
   if ( computerSelection === 'paper' ){
     if (playerSelection === 'scissors') {
       playerScore++;
-      return 'You Win! Scissors beats Paper';
+      resultElem.textContent = `You Win! Scissors beats computer's Paper`;
+      return;
     }
     else if (playerSelection === 'rock') {
-      return 'You Lose! Paper beats Rock';
+      resultElem.textContent = `You Lose! computer's Paper beats Rock`;
+      return;
     };
   }
   //when pc = scissors
   if ( computerSelection === 'scissors' ){
     if (playerSelection === 'rock') {
       playerScore++;
-      return 'You Win! Rock beats Scissors';
+      resultElem.textContent = `You Win! Rock beats computer's Scissors`;
+      return;
     }
     else if (playerSelection === 'paper') {
-      return 'You Lose! Scissors beats Paper';
+      resultElem.textContent = `You Lose! computer's Scissors beats Paper`;
+      return;
     };
   }
-  //catch possible bad inputs like 'rock34234rock', '', 'rocks'
-  return 'there was an invalid choice';
 };
 
-// play some rounds
-function playGame(rounds) {
-  for (let i = 1; i < rounds+1 ; i++){
-    // if user cancels prompt, random string allows strogn methods on the returned null
-    playerSelection = ( prompt(`Let's play rock, paper, scissors! Type your
-    choice for round ${i}:`, 'rock') ?? 'promptCancelled').trim().toLowerCase();
-    computerSelection = getComputerChoice();
-    console.log( `Round: ${i}, Result: ${ playRound( playerSelection, computerSelection ) }` );
+//listen for player choice via bubbling. check state, play a round, check state, update state, output it.
+document.querySelector('.buttonsHolder').addEventListener('click', event=> {
+  // stop game with return since listener with anon function can't be removed
+  if (round === 5 && gameOver) return;
+  playRound( event.target.className, getComputerChoice() ); // className will be rock/paper/scissors
+  //playRound is before game over so result elements keep displaying last round result.
+  if (round === 5 && (playerScore/round) > 0.5){ 
+    scoreElem.textContent = `You won the best of ${round} rounds!`;
+    gameOver = true;
+    return;
+  } else if(round === 5 && (playerScore/round) < 0.5){
+    scoreElem.textContent = `You did not win the best of ${round} rounds.`;
+    gameOver = true;
+    return;
   }
-  console.log(`${ (playerScore/rounds > 0.5)
-                    ? `You won as the best of ${rounds} rounds!`
-                    : `You did not win as the best of ${rounds} rounds.`
-  }`);
-}
+  scoreElem.innerHTML = `Your score: ${playerScore}&nbsp;&nbsp;&nbsp;Round: ${round}`; //.textContent collapsed the spaces
+  round++;
+});
 
-// choice & state variables
+
+// global game state variables
 let computerSelection;
 let playerSelection;
 let playerScore = 0;
+let round = 1;
+let gameOver = false;
+//reference nodes
+const resultElem = document.querySelector('.result');
+const scoreElem = document.querySelector('.score');
 
-// start 5 game rounds
-// playGame(5);
-playGame(2);
